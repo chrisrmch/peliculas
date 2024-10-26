@@ -1,6 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/models/models.dart';
 
-class MovieSlider extends StatelessWidget {
+class MovieSlider extends StatefulWidget {
+  final List<Movie> movies;
+  final String? title;
+  final Function onNextPage;
+
+  const MovieSlider(
+      {super.key, required this.movies, this.title, required this.onNextPage});
+
+  @override
+  State<MovieSlider> createState() => _MovieSliderState();
+}
+
+class _MovieSliderState extends State<MovieSlider> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 500) {
+        widget.onNextPage();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -13,16 +46,16 @@ class MovieSlider extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              "Populaares",
+              "Populares",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
           Expanded(
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 20,
+                  itemCount: widget.movies.length,
                   itemBuilder: (context, index) {
-                    return const _MoviePoste();
+                    return _MoviePoste(movie: widget.movies[index]);
                   }))
         ],
       ),
@@ -31,8 +64,11 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoste extends StatelessWidget {
+  final Movie movie;
+
   const _MoviePoste({
     super.key,
+    required this.movie,
   });
 
   @override
@@ -46,19 +82,19 @@ class _MoviePoste extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => {},
-            child: const ClipRRect(
+            child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(20)),
               child: FadeInImage(
                 placeholder: AssetImage('assets/no-image.jpg'),
-                image: NetworkImage('https://placehold.co/300x400'),
+                image: NetworkImage(movie.fullPosterImg),
               ),
             ),
           ),
           const SizedBox(
             height: 5,
           ),
-          const Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
+          Text(
+            movie.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
