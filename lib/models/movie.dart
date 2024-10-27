@@ -15,20 +15,7 @@ class Movie {
   bool video;
   double voteAverage;
   int voteCount;
-
-  get fullPosterImg {
-    if (this.posterPath != null)
-      return 'https://image.tmdb.org/t/p/w500${this.posterPath}';
-
-    return 'https://i.stack.imgur.com/GNhxO.png';
-  }
-
-  get fullBackdropPath {
-    if (this.backdropPath != null)
-      return 'https://image.tmdb.org/t/p/w500${this.backdropPath}';
-
-    return 'https://i.stack.imgur.com/GNhxO.png';
-  }
+  String? uniqueId;
 
   Movie({
     required this.adult,
@@ -45,6 +32,7 @@ class Movie {
     required this.video,
     required this.voteAverage,
     required this.voteCount,
+    this.uniqueId,
   });
 
   factory Movie.fromJson(String str) => Movie.fromMap(json.decode(str));
@@ -84,4 +72,18 @@ class Movie {
         "vote_average": voteAverage,
         "vote_count": voteCount,
       };
+
+  get fullPosterImg {
+    if (posterPath != null)
+      return 'https://image.tmdb.org/t/p/w500${this.posterPath}';
+
+    return 'https://i.stack.imgur.com/GNhxO.png';
+  }
+
+  get fullBackdropPath {
+    if (backdropPath != null)
+      return 'https://image.tmdb.org/t/p/w500${this.backdropPath}';
+
+    return 'https://i.stack.imgur.com/GNhxO.png';
+  }
 }

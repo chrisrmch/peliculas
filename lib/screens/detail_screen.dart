@@ -5,6 +5,8 @@ import 'package:peliculas/models/models.dart';
 import 'package:peliculas/widgets/widgets.dart';
 
 class DetailsScreen extends StatelessWidget {
+  const DetailsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
@@ -46,12 +48,15 @@ class _PosterAndTitle extends StatelessWidget {
       padding: EdgeInsets.only(left: 20, right: 20),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: FadeInImage(
-              height: 150,
-              placeholder: const AssetImage("assets/no-image.jpg"),
-              image: NetworkImage(movie.fullPosterImg),
+          Hero(
+            tag: movie.uniqueId!,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              child: FadeInImage(
+                height: 150,
+                placeholder: const AssetImage("assets/no-image.jpg"),
+                image: NetworkImage(movie.fullPosterImg),
+              ),
             ),
           ),
           SizedBox(
