@@ -10,7 +10,7 @@ class MovieSearchDelegate extends SearchDelegate {
     return [
       IconButton(
         onPressed: () => query = '',
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
       )
     ];
   }
@@ -20,7 +20,7 @@ class MovieSearchDelegate extends SearchDelegate {
     return IconButton(
 /*icon: AnimatedIcon(
 icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),*/
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back),
         onPressed: () {
           close(context, null);
         });
@@ -28,7 +28,26 @@ icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),*/
 
   @override
   Widget buildResults(BuildContext context) {
-    return Text('buildResults');
+    if (query.isEmpty) {
+      return _emptyContainer();
+    }
+    final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
+    moviesProvider.getSuggestionsByQuery(query);
+
+    return StreamBuilder(
+      stream: moviesProvider.suggestionStream,
+      builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
+        if (snapshot.hasData) {
+          final movies = snapshot.data!;
+          return ListView.builder(
+            itemCount: movies.length,
+            itemBuilder: ((context, index) => _MovieItem(movies[index])),
+          );
+        } else {
+          return _emptyContainer();
+        }
+      },
+    );
   }
 
   @override
@@ -38,7 +57,7 @@ icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),*/
     }
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
     moviesProvider.getSuggestionsByQuery(query);
-    
+
     return StreamBuilder(
         stream: moviesProvider.suggestionStream,
         builder: (_, AsyncSnapshot<List<Movie>> snapshot) {

@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:peliculas/models/movie.dart';
 
 // Creditos
 // https://stackoverflow.com/a/52922130/7834829
@@ -20,6 +18,6 @@ class Debouncer<T> {
   set value(T val) {
     _value = val;
     _timer?.cancel();
-    _timer = Timer(duration, () => onValue!(_value!));
+    _timer = Timer(duration, () => onValue!(_value as T));
   }
 }

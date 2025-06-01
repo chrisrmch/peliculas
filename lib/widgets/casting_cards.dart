@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:peliculas/models/models.dart';
 import 'package:peliculas/providers/movie_provider.dart';
 import 'package:provider/provider.dart';
@@ -25,11 +26,11 @@ class CastingCards extends StatelessWidget {
         final List<Cast> cast = snapshot.data!;
 
         return Container(
-          margin: EdgeInsets.only(bottom: 30),
+          margin: EdgeInsets.only(top: 10),
           width: double.infinity,
           height: 180,
           child: ListView.builder(
-            itemCount: 10,
+            itemCount: cast.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (_, int index) => _CastCard(actor: cast[index]),
           ),

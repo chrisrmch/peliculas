@@ -11,14 +11,13 @@ class MoviesProvider extends ChangeNotifier {
   final String _baseUrl = 'api.themoviedb.org';
   final String _language = 'es-ES';
 
-  final StreamController<List<Movie>> _sugestionsStreamController =
-      StreamController.broadcast();
+  final StreamController<List<Movie>> _sugestionsStreamController = StreamController.broadcast();
 
   Stream<List<Movie>> get suggestionStream =>
       _sugestionsStreamController.stream;
-
+  
   final debouncer = Debouncer(
-    duration: Duration(milliseconds: 500),
+    duration: const Duration(milliseconds: 500),
   );
 
   List<Movie> onDisplayMovies = [];
@@ -82,7 +81,7 @@ class MoviesProvider extends ChangeNotifier {
     debouncer.value = '';
     debouncer.onValue = (value) async {
       // print('Tenemos valor a buscar: $value');
-      final results = await this.searchMovies(value);
+      final results = await searchMovies(value);
       _sugestionsStreamController.add(results);
     };
 
